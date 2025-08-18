@@ -1,0 +1,46 @@
+### Health
+GET http://localhost:8000/health
+
+### Estados (GET)
+GET http://localhost:8000/estados
+Accept: application/json
+
+### Contactos (GET, limit 5)
+GET http://localhost:8000/contactos?limit=5
+Accept: application/json
+
+### Contacto (POST crear)
+POST http://localhost:8000/contactos
+Content-Type: application/json
+
+{
+  "first_name":"Ada",
+  "last_name":"Lovelace",
+  "email":"ada@example.com",
+  "company_name":"Analytical Engines",
+  "department":"R&D",
+  "address":"Somerset House",
+  "city":"London",
+  "state":"LD",
+  "zip":"WC2R",
+  "phone1":"+44-20-1234-5678",
+  "phone2":"+44-20-8765-4321"
+}
+
+### Contacto (PUT actualizar)
+PUT http://localhost:8000/contactos/ada@example.com
+Content-Type: application/json
+
+{
+  "first_name":"Ada",
+  "last_name":"Byron",
+  "email":"ada@example.com",
+  "company_name":"Analytical Engines",
+  "department":"Research",
+  "address":"Somerset House, New Wing",
+  "city":"London",
+  "state":"LD",
+  "zip":"WC2R",
+  "phone1":"+44-20-5555-1111",
+  "phone2":"+44-20-5555-2222"
+}
