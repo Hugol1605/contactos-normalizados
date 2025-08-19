@@ -82,13 +82,13 @@ curl "http://localhost:8000/contacts"
 curl http://localhost:8000/health
 
 # Listar contactos
-curl "http://localhost:8000/contacts"
+curl "http://localhost:8000/contactos"
 
 # Filtrar por email
-curl "http://localhost:8000/contacts?email=jbutt@gmail.com"
+curl "http://localhost:8000/contactos?email=jbutt@gmail.com"
 
 # Crear
-curl -X POST "http://localhost:8000/contacts" -H "Content-Type: application/json" -d '{
+curl -X POST "http://localhost:8000/contactos" -H "Content-Type: application/json" -d '{
   "nombre": "Ana",
   "email": "ana@example.com",
   "telefono": "555-0000",
@@ -96,7 +96,7 @@ curl -X POST "http://localhost:8000/contacts" -H "Content-Type: application/json
 }'
 
 # Actualizar
-curl -X PUT "http://localhost:8000/contacts/1" -H "Content-Type: application/json" -d '{
+curl -X PUT "http://localhost:8000/contactos/1" -H "Content-Type: application/json" -d '{
   "nombre": "Ana María",
   "email": "ana@example.com",
   "telefono": "555-0001",
