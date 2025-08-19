@@ -1,0 +1,66 @@
+services:
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-app_password}
+      POSTGRES_DB: ${POSTGRES_DB:-challenge}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    expose:
+      - "5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    networks:
+      - api_db
+      - ingest_db
+
+  api:
+    build:
+      context: ./api
+    environment:
+      APP_DB_URL: ${APP_DB_URL:-postgresql://app:app_password@db:5432/challenge}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    networks:
+      - api_db
+      - public_net
+
+  centos_ingest:
+    platform: linux/amd64
+    build:
+      context: ./centos_ingest
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-app_password}
+      POSTGRES_DB: ${POSTGRES_DB:-challenge}
+    volumes:
+      - ./data:/data:ro
+    networks:
+      - ingest_db
+    restart: "no"
+    profiles: ["ops"]
+
+networks:
+  api_db:
+    driver: bridge
+    internal: true
+  ingest_db:
+    driver: bridge
+    internal: true
+  public_net:
+    driver: bridge
+
+volumes:
+  db_data:
